@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Generate Random NeedIt Records</name>
+        <run_as display_value="System Administrator">6816f79cc0a8016401c5a33be04be441</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2020-03-12 17:44:50</run_start>
+        <run_time>1970-01-01 08:00:00</run_time>
+        <run_type>on_demand</run_type>
+        <script><![CDATA[//obtener todos los sys_id
+var usuarios=[];
+var rtype=['hr','facilities','legal'];
+var gr = new GlideRecord("sys_user");
+gr.addQuery('active',true);
+gr.query();
+while(gr.next()){
+	usuarios.push(gr.getValue('sys_id'));
+}
+//obtener una fecha aleatoria//
+var rightNow = new GlideDateTime();		
+			pickDate = (Math.floor(Math.random() * 366) - 182);
+			rightNow.addDaysUTC(pickDate);
+
+//sacar valores aleatorios//
+var usualeatorio=Math.floor(Math.random() * (usuarios.length - usuarios[0])) + usuarios[0];
+var typealeatorio=Math.floor(Math.random()*(rtype.length-rtype[0]))+rtype[0];
+
+//insertar a la tabla de needlt//
+var gr2= new GlideRecord('x_58872_needit_needit');
+gr2.initialize();
+
+gr2.u_requested_for=usualeatorio;
+
+gr2.u_request_type=typealeatorio;
+
+if(gr.u_request_type=="legal"){
+	var le=['legal1','legal2'];
+	gr2.u_what_needed=Math.floor(Math.random() * (le.length - le[0])) + le[0];
+}
+else if(gr.u_request_type=="hr"){
+	var hr=['hr1','hr2'];
+	gr2.u_what_needed=Math.floor(Math.random() * (hr.length - hr[0])) + hr[0];
+}
+else if(gr.u_request_type=="facilities"){
+	var fa=['facilities1','facilities2'];
+	gr2.u_what_needed=Math.floor(Math.random() * (fa.length - fa[0])) + fa[0];
+}		
+gr2.u_when_needed=rightNow;
+gr2.insert();
+]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-03-12 17:46:36</sys_created_on>
+        <sys_id>626e7441dba30010de7929464896190d</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Generate Random NeedIt Records</sys_name>
+        <sys_package display_value="NeedIt Virtual Agent Conversations" source="x_371103_needit_vi">705c2445db630010de79294648961917</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt Virtual Agent Conversations">705c2445db630010de79294648961917</sys_scope>
+        <sys_update_name>sysauto_script_626e7441dba30010de7929464896190d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-03-12 18:23:48</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>
